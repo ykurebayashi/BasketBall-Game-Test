@@ -5,11 +5,14 @@ using UnityEngine;
 public class ballAction : MonoBehaviour
 {
     private Rigidbody   rbBall;
+
+    public  GameObject player;
     // Start is called before the first frame update
 
     void    Awake(){
         rbBall = GetComponent<Rigidbody>();
-
+        player = GameObject.FindGameObjectWithTag("Player");
+        StartCoroutine(CoroutineShoot3());
     }
     void Start()
     {
@@ -20,5 +23,17 @@ public class ballAction : MonoBehaviour
     void Update()
     {
         
+    }
+
+    void        OnCollisionEnter (Collision collision){
+        if(collision.gameObject.tag == "Scored"){
+            Destroy(gameObject);
+            player.GetComponent<PlayerMovement>().score ++;
+        }
+    }
+
+    IEnumerator CoroutineShoot3(){
+        yield return    new WaitForSeconds(6);
+        Destroy(gameObject);
     }
 }

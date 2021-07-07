@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -18,6 +19,12 @@ public class PlayerMovement : MonoBehaviour
     public  GameObject ball;
 
     public  GameObject  locationBall;
+
+    public  GameObject  theMainBall;
+
+    public  Text    pointsText;
+
+    public  float   score;
     // Start is called before the first frame update
     void Start()
     {
@@ -30,6 +37,7 @@ public class PlayerMovement : MonoBehaviour
     {
         Jump();
         Shoot();
+        pointsText.text = score.ToString();
     }
 
     private void    FixedUpdate(){
@@ -51,18 +59,25 @@ public class PlayerMovement : MonoBehaviour
     private void    Shoot(){
         if(Input.GetKeyDown(KeyCode.Mouse0)){
             anim.SetBool("Shooting", true);
+            theMainBall.SetActive(false);
             StartCoroutine(CoroutineShoot());
             StartCoroutine(CoroutineShoot2());
         }
     }
 
     IEnumerator CoroutineShoot(){
-        yield return    new WaitForSeconds(2);
+        yield return    new WaitForSeconds(2f);
         anim.SetBool("Shooting", false);
+        StartCoroutine(CoroutineWaitForBall());
     }
 
     IEnumerator CoroutineShoot2(){
         yield return    new WaitForSeconds(1.5f);
         Instantiate(ball, locationBall.transform.position, Quaternion.identity);
     }
+
+        IEnumerator CoroutineWaitForBall(){
+            yield return    new WaitForSeconds(0.5f);
+            theMainBall.SetActive(true);
+        }
 }
